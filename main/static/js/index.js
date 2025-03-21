@@ -39,7 +39,7 @@ $(document).ready(function(){
   })
 
   // 硬件
-  $('body').on('change', '#echart-select-hardware', function(){
+  $('body').on('change', '#echart-select', function(){
     $('#echart-select-software').val(0);
     $('#echart-select-type').val(0);
     if(this.value == 0){
@@ -49,38 +49,10 @@ $(document).ready(function(){
     }else if(this.value == 999){
       myChart.showLoading();
       $('#echart-select-type').attr('disabled', true);
-      $.statistics(1);  // 1:硬件，2:软件，3:硬件类型，4:软件类型
+      $.statistics(1);
     }else{
       myChart.showLoading();
       $.statistics(3, this.value.replace('h-', ''));
-      // 硬件 BUG 类型统计
-    }
-  })
-
-  // 软件
-  $('body').on('change', '#echart-select-software', function(){
-    $('#echart-select-hardware').val(0);
-    $('#echart-select-type').val(0);
-    if(this.value == 0){
-      myChart.clear();
-      $('#echart-select-type').attr('disabled', true);
-      return 0;
-    }else if(this.value == 999){
-      myChart.showLoading();
-      $('#echart-select-type').attr('disabled', true);
-      $.statistics(2);  // 1:硬件，2:软件，3:硬件类型，4:软件类型
-    }else if(this.value == 1){
-      myChart.showLoading();
-      $.statistics(4, 1)
-    }else if(this.value == 2){
-      myChart.showLoading();
-      $.statistics(4, 2)
-    }else if(this.value == 3){
-      myChart.showLoading();
-      $.statistics(4, 3)
-    }else if(this.value == 4){
-      myChart.showLoading();
-      $.statistics(4, 4)
     }
   })
 

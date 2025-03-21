@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import User
 # Create your models here.
 
 class Release_Family(models.Model):
@@ -132,7 +132,7 @@ class Bug_Status(models.Model):
     def __str__(self):
         return f'{self.name}'
 
-class Bug_Tag(models.Model):
+class Bug_Label(models.Model):
     """缺陷标签"""
     object = models.manager
     name = models.CharField(max_length=100, default='')
@@ -158,9 +158,9 @@ class Bug(models.Model):
     h4 = models.ForeignKey(Node_H4, on_delete=models.CASCADE, blank=True, null=True)
     h5 = models.ForeignKey(Node_H5, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField(max_length=200)
-    author = models.ForeignKey(AbstractBaseUser, on_delete=models.CASCADE, blank=True, null=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     status = models.ForeignKey(Bug_Status, on_delete=models.SET_NULL, blank=True, null=True)
-    tag = models.ManyToManyField(Bug_Tag, blank=True)
+    tag = models.ManyToManyField(Bug_Label, blank=True)
     type = models.ForeignKey(Bug_Type, on_delete=models.SET_NULL, blank=True, null=True)
     create_time = models.DateTimeField(default=timezone.now)
     update_time = models.DateTimeField(auto_now=True)
@@ -174,7 +174,7 @@ class Bug_Comments(models.Model):
     object = models.manager
     bug = models.ForeignKey(Bug, on_delete=models.CASCADE)
     content = models.TextField(max_length=500)
-    author = models.ForeignKey(AbstractBaseUser, on_delete=models.CASCADE, blank=True, null=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     create_time = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
@@ -186,10 +186,10 @@ class Case(models.Model):
     order = models.IntegerField(default=0)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, default='')
-    author = models.ForeignKey(AbstractBaseUser, on_delete=models.CASCADE, blank=True, null=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     create_time = models.DateTimeField(auto_now=True)
     status = models.IntegerField(choices=((0, '待测'), (1, '失败'), (2, '通过'), (3, '阻塞')), default=0)
-    jsmind_data = models.CharField(default='', blank=True, null=True)
+    jsmind_data = models.CharField(max_length=1000, default='', blank=True, null=True)
 
     def __str__(self):
         return f'{self.name}'
@@ -198,7 +198,7 @@ class Report(models.Model):
     """报告"""
     object = models.manager
     name = models.CharField(max_length=100, default='')
-    uploader = models.ForeignKey(AbstractBaseUser, on_delete=models.CASCADE, blank=True, null=True)
+    uploader = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     comments = models.CharField(max_length=500, default='', blank=True, null=True)
 
     def __str__(self):

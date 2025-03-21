@@ -15,7 +15,7 @@ main {
   height: -webkit-fill-available; 
   max-height: 92.35vh;
   */
-  height: calc(100vh - 71.33px);
+  height: calc(100vh - 68px);
   overflow-x: auto;
   overflow-y: hidden;
 }

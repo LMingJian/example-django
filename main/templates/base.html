@@ -61,7 +61,7 @@
     <ul class="nav nav-pills flex-column mb-auto" id="sidebar-ul">
       <li class="nav-item">
         {% block sidebars_item1 %}
-        <a href="/release" class="nav-link text-white">
+        <a href="/software_release" class="nav-link text-white">
         {% endblock %}
           <svg class="bi me-2" width="16" height="16"><use xlink:href="#code"></use></svg>
           软件发行
@@ -69,7 +69,7 @@
       </li>
       <li class="nav-item">
         {% block sidebars_item6 %}
-        <a href="/release2" class="nav-link text-white">
+        <a href="/hardware_release" class="nav-link text-white">
         {% endblock %}
           <svg class="bi me-2" width="16" height="16"><use xlink:href="#hdd"></use></svg>
           硬件发行
@@ -78,7 +78,7 @@
       {% if user.username != '' %}
       <li class="nav-item">
         {% block sidebars_item2 %}
-        <a href="/workspace" class="nav-link text-white">
+        <a href="/bug_workspace" class="nav-link text-white">
         {% endblock %}
           <svg class="bi me-2" width="16" height="16"><use xlink:href="#bug"></use></svg>
           缺陷收集
@@ -108,7 +108,11 @@
     <div class="dropdown">
       <a href="javascript:void(0);" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown">
         <img src="/static/pic/null.png" alt="" width="32" height="32" class="rounded-circle me-2">
+        {% if user.first_name != '' %}
           <strong id="user{{user.id}}">{{user.first_name}}</strong>
+        {% else %}
+          <strong id="user{{user.id}}">登录用户</strong>
+        {% endif %}
       </a>
       <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
         <li><a class="dropdown-item" id="logout" href="javascript:void(0);">注销</a></li>

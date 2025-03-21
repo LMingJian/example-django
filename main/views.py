@@ -25,7 +25,7 @@ def view_login(request):
 
 # @login_required()
 def view_index(request):
-    project = models.Project.objects.exclude(if_bug=0)
+    project = models.Project.objects.exclude(if_show_bug=0)
     report = models.Report.objects.all().order_by('-id')
     content = {
         'project': project,
@@ -59,10 +59,11 @@ def view_software_release(request):
     }
     return render(request, 'software-release.html', content)
 
+@login_required()
 def view_hardware_release(request):
     id = request.GET.get('id', '')
     if id == '':
-        release_family = models.Release_Family.objects.filter(type=0).order_by('-create_time')
+        release_family = models.Release_Family.objects.filter(type=1).order_by('order')
         release_project = {}
         for each in release_family:
             project = models.Release_Project.objects.filter(father=each).order_by('order')
@@ -81,7 +82,7 @@ def view_bug_workspace(request):
     id = request.GET.get('id', '')
     all = request.GET.get('all', '')
     if id == '':
-        project_list = models.Project.objects.exclude(if_bug=0).order_by('order')
+        project_list = models.Project.objects.exclude(if_show_bug=0).order_by('order')
         return render(request, 'bug-workspace-index.html', context={'project_list': project_list})
     if all != '':
         all = 1
@@ -134,7 +135,7 @@ def view_case(request):
     page_id = request.GET.get('page', '1')
     user_id = request.GET.get('user', '')
     if id == '':
-        project_list = models.Project.objects.exclude(if_case=0).order_by('order')
+        project_list = models.Project.objects.exclude(if_show_case=0).order_by('order')
         return render(request, 'case-index.html', context={'project_list': project_list})
     project = models.Project.objects.get(id=id)
     if user_id != '':
@@ -172,7 +173,7 @@ def view_case_editing(request):
 def view_version(request):
     id = request.GET.get('id', '')
     if id == '':
-        project_list = models.Project.objects.exclude(if_bug=0).order_by('order')
+        project_list = models.Project.objects.exclude(if_show_bug=0).order_by('order')
         return render(request, 'version-index.html', context={'project_list': project_list})
     version = models.Project_Version.objects.filter(father_id=id).order_by('-create_time')
     content = {}
@@ -515,10 +516,10 @@ def api_create_project(request):
         flag = request.POST.get('flag', '')
         if name != '':
             if flag == '1':
-                # models.Project.objects.create(name=name, if_bug=0)
+                # models.Project.objects.create(name=name, if_show_bug=0)
                 models.Project.objects.create(name=name)
             else:
-                # models.Project.objects.create(name=name, if_case=0)
+                # models.Project.objects.create(name=name, if_show_case=0)
                 models.Project.objects.create(name=name)
             return my_response({'status': 10000, 'message': 'Success'})
         else:
@@ -592,7 +593,7 @@ def api_get_bugCount(request):
             temp[f'{project.id}'] = len(bug)
             return my_response({'status': 10000, 'message': temp})            
         elif flag == '1':
-            project_list = models.Project.objects.exclude(if_bug=0)
+            project_list = models.Project.objects.exclude(if_show_bug=0)
             temp = {}
             for each in project_list:
                 bug = models.Bug.objects.filter(project=each).exclude(status__name='已改并关闭').exclude(status__name='不改并关闭')
@@ -777,7 +778,7 @@ def api_upload_hardware_release(request):
 
 def statistics_count():
     """硬件统计"""
-    projects = models.Project.objects.exclude(if_bug=0)
+    projects = models.Project.objects.exclude(if_show_bug=0)
     project_list = []; total_list = []
     open_list = []; close_list = []; revoke_list = []
     for each in projects:
@@ -1242,8 +1243,8 @@ def api_get_projectStatus(request):
     if request.method == "GET":
         project_id = request.GET.get('pid', '')
         project = models.Project.objects.get(id=project_id)
-        bug_status = project.if_bug
-        case_status = project.if_case
+        bug_status = project.if_show_bug
+        case_status = project.if_show_case
         return my_response({'status': 10000, 'message': {'bug': bug_status, 'case': case_status}})
     
 def api_modify_projectStatus(request):
@@ -1253,8 +1254,8 @@ def api_modify_projectStatus(request):
         bug_status = request.POST.get('bug', '')
         case_status = request.POST.get('case', '')
         project = models.Project.objects.get(id=project_id)
-        project.if_bug = bug_status
-        project.if_case = case_status
+        project.if_show_bug = bug_status
+        project.if_show_case = case_status
         project.save()
         return my_response({'status': 10000, 'message': 'Success'})
 
@@ -1315,7 +1316,7 @@ def api_get_caseCount(request):
             temp[f'{project.id}'] = len(bug)
             return my_response({'status': 10000, 'message': temp})            
         elif flag == '1':
-            project_list = models.Project.objects.exclude(if_case=0)
+            project_list = models.Project.objects.exclude(if_show_case=0)
             temp = {}
             for each in project_list:
                 case = models.Case.objects.filter(project=each)
@@ -1423,7 +1424,7 @@ def api_get_versionCount(request):
             temp[f'{project.id}'] = len(version)
             return my_response({'status': 10000, 'message': temp})            
         elif flag == '1':
-            project_list = models.Project.objects.exclude(if_bug=0)
+            project_list = models.Project.objects.exclude(if_show_bug=0)
             temp = {}
             for each in project_list:
                 version = models.Project_Version.objects.filter(father=each)

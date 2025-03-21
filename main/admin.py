@@ -6,7 +6,7 @@ reg_list = [
     Release_Family, Release_Project, Release_File, Release_Version, 
     Project, Project_Version,
     Node_H1, Node_H2, Node_H3, Node_H4, Node_H5,
-    Bug, Bug_Comments, Bug_Status, Bug_Tag, Bug_Type,
+    Bug, Bug_Comments, Bug_Status, Bug_Label, Bug_Type,
     Case, Report,
     ]
 
