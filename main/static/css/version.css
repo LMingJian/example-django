@@ -1,0 +1,137 @@
+.page-content {
+    font-size: 16px;
+    line-height: 25px;
+    height: 725px;
+}
+
+.page-content h2 {
+    color: #C42E51;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #ddd;
+    margin-top: 40px;
+    margin-bottom: 20px
+}
+
+.page-content ul {
+    padding-left: 30px
+}
+
+.page-content ul li {
+    list-style: disc;
+    margin: 5px 0;
+}
+
+.page-content p {
+    margin: 10px 0
+}
+
+.page-nav {
+    position: sticky;
+    overflow: auto;
+    float: left;
+    width: 220px;
+    top: 20px;
+    height: 82vh;
+    padding: 0 0 20px 0
+}
+
+.page-nav h4 {
+    margin-top: 5px;
+    color: #666;
+    font-size: 16px;
+    padding-left: 10px;
+}
+
+.page-nav a {
+    border-left: 1px solid rgba(78,97,103,0.25);
+    color: #999;
+    padding: 7px 10px;
+    display: block;
+    position: relative;
+    text-decoration: none;
+}
+
+.page-nav a:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    bottom: 50%;
+    background: #F72C5B;
+    width: 3px;
+    left: -1px;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-timing-function: ease-out;
+    transition-timing-function: ease-out;
+}
+
+.page-nav a:hover {
+    text-decoration: none;
+    color: #333
+}
+
+.page-nav a:hover:before {
+    top: 0;
+    bottom: 0
+}
+
+.page-nav a.active {
+    color: #F72C5B;
+}
+
+.page-detail {
+    margin-left: 220px;
+    margin-bottom: 20px;
+    padding: 0 30px 0 30px;
+    overflow-x: hidden;
+    height: 81vh;
+}
+
+.page-detail h2 {
+    margin: 10px 0;
+    padding-top: 5px;
+    font-size: 22px
+}
+
+.page-detail h2:first-child {
+    margin-top: 0;
+    padding-top: 0
+}
+
+.page-detail h2+h3 {
+    margin-top: 20px
+}
+
+.page-detail h3 {
+    margin: 40px 0 15px 0;
+    font-size: 18px
+}
+
+.page-detail p {
+    margin: 15px 0
+}
+
+.page-detail li {
+    padding-left: 0
+}
+
+.page-detail li li {
+    margin: 5px 0
+}
+
+.page-detail .time {
+    float: right;
+    position: relative;
+    top: -35px
+}
+
+.page-detail .function {
+    float: right;
+    position: relative;
+    top: -41px;
+    margin-left: 10px;
+}
+
+#modifyVersionModal textarea {
+    height: 150px;
+}

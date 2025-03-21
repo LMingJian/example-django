@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block sidebars_item2 %}
+<a href="/workspace" class="nav-link active selected">
+{% endblock %}
+
+{% block content %}
+    {% if user.username != '' %}
+    <!-- User function -->
+    <div class="btn-group" role="group">
+      <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#workspaceModal">创建项目</button>
+    </div>
+    {% endif %}
+
+    <hr>
+
+    <!-- Item list -->
+    <div id='list-content' class='min-width-600'>
+      <div class='row'>
+        {% for data in project_list %}
+        {% cycle 'row1' 'row2' as rowcolors silent %}
+        {% if rowcolors == 'row1' %}
+          <div class='col-6'>
+            <div class="list-group mb-1">
+              <a href="workspace?id={{data.id}}" class="list-group-item list-group-item-action d-flex gap-3 py-3">
+                <img src="/static/pic/null.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
+                <div class="d-flex gap-2 w-100 justify-content-between">
+                  <div>
+                    <h4 class="mb-0 p-title" id="p-{{data.id}}">{{data.name}}</h4>
+                  </div>
+                  <small class="opacity-50 text-nowrap">{{data.create_time}}</small>
+                </div>
+              </a>
+              <hr>
+            </div>
+          </div>
+        {% endif %}
+
+        {% if rowcolors == 'row2' %}
+          <div class='col-6'>
+            <div class="list-group mb-1">
+              <a href="workspace?id={{data.id}}" class="list-group-item list-group-item-action d-flex gap-3 py-3">
+                <img src="/static/pic/null.png" alt="twbs" width="32" height="32" class="rounded-circle flex-shrink-0">
+                <div class="d-flex gap-2 w-100 justify-content-between">
+                  <div>
+                    <h4 class="mb-0 p-title" id="p-{{data.id}}">{{data.name}}</h4>
+                  </div>
+                  <small class="opacity-50 text-nowrap">{{data.create_time}}</small>
+                </div>
+              </a>
+              <hr>
+            </div>
+          </div>
+        {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+{% endblock %}
+
+{% block model %}
+<div class="modal fade" id="workspaceModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">创建项目</h5>
+      </div>
+      <div class="modal-body">
+        <div class="input-group mb-3">
+          <label for='workspace-name'><span class="input-group-text">项目名称</span></label>
+          <input type="text" class="form-control" id='workspace-name'>
+        </div>
+        <span>PS: 此处创建的项目会同步出现在用例收集</span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary">确认</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="/static/js/workspace-index.js"></script>
+{% endblock %}

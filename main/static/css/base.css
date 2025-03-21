@@ -1,0 +1,79 @@
+#back-button {
+    margin-right: 8px; 
+    max-width: 58px;
+}
+
+#container {
+    padding-top: var(--bs-gutter-x,.75rem);
+    overflow-y: auto;
+    min-width: 1030px;
+}
+
+.float-right {
+    float:right;
+}
+
+.margin-25 {
+    margin-left: 25px
+}
+
+.margin-50 {
+    margin-left: 50px
+}
+
+.margin-75 {
+    margin-left: 75px
+}
+
+.overflow-y {
+    overflow-y: auto;
+    max-height: 90vh;
+}
+
+.height-500 {
+    height: 500px;
+}
+
+.height-600 {
+    height: 600px;
+}
+
+.width-400 {
+    width: 400px;
+}
+
+.width-120 {
+    width: 120vh!important;
+}
+
+.width-60 {
+    width: 57vh!important;
+}
+
+.width-25 {
+    width: 25vh!important;
+}
+
+.width-220 {
+    width: 220px;
+}
+
+.width-70 {
+    width: 70px;
+}
+
+.min-width-600 {
+    min-width: 600px;
+}
+
+.display-none {
+    display: none;
+}
+
+.w-35 {
+    width: 35%!important;
+}
+
+.delete {
+    color: #CC3434; 
+}

@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if user.username == 'admin' %}
+<div class="row" id='{{user.id}}'>
+    <div class="col">
+        <div class="card add-user">
+            <div class="card-header">
+                添加用户
+            </div>
+            <div class="card-body">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control username" placeholder="Username">
+                </div>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control password" placeholder="Password">
+                </div> 
+            </div>
+            <div class="card-footer">
+                <div class="btn-group btn-group-sm float-right" role="group">
+                    <button type="button" class="btn btn-dark">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card add-tag">
+            <div class="card-header">
+                添加标签
+            </div>
+            <div class="card-body">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control tagname" placeholder="Tag">
+                </div> 
+            </div>
+            <div class="card-footer">
+                <div class="btn-group btn-group-sm float-right" role="group">
+                    <button type="button" class="btn btn-dark">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                清空 Session
+            </div>
+            <div class="card-body">
+                是否清除现有 Session, 让所有用户重新登录
+            </div>
+            <div class="card-footer">
+                <div class="btn-group btn-group-sm float-right" role="group">
+                    <button type="button" class="btn btn-dark delete-session">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                项目状态变更
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="input-group mt-2">
+                            <select class="form-select" title='project' id='project-select'>
+                                <option selected value=0>Choose...</option>
+                                {% for each in project %}
+                                <option value={{each.id}}>{{each.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchBug">
+                            <label class="form-check-label" for="flexSwitchBug">统计故障</label>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCase">
+                            <label class="form-check-label" for="flexSwitchCase">统计用例</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="btn-group btn-group-sm float-right" role="group">
+                    <button type="button" class="btn btn-dark change-project">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<h3>没有权限</h3>
+{% endif %}
+{% endblock %}
+
+{% block script %}
+<script src="/static/js/setting.js"></script>
+{% endblock %}

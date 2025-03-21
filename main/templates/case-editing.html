@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link type="text/css" rel="stylesheet" href="/static/jsmind-0.4.6/jsmind.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/case-make.css" />
+{% endblock %}
+
+{% block sidebars_item4 %}
+<a href="/case" class="nav-link active selected">
+{% endblock %}
+
+{% block content %}
+<div class='container-header'>
+    <h3>{{case.project.name}}</h3>
+    <hr>
+    <button type="button" class="btn btn-outline-dark me-2" id='back-button'>返回</button>
+    <button type="button" class="btn btn-outline-dark me-2" id='back-only'>上一个</button>
+    <button type="button" class="btn btn-outline-dark me-2" id='next-only'>下一个</button>
+    <hr>
+</div>
+
+<div class="height-600 mb-3">
+    <div id='jsmind_nav' class='p-3'>
+      <p><strong>序号: </strong>{{case.order}}</span></p>
+      <p><strong>名称: </strong><span class='edit'>{{case.name}}</span></p>
+      <p><strong>作者: </strong>{{case.creater}}</p>
+      <p><strong>时间: </strong>{{case.create_time}}</p>
+      <p><strong>状态: </strong>
+        {% if case.status == '通过' %}
+        <span class='badge bg-success'>通过</span>
+        {% elif case.status == '失败' %}
+        <span class='badge bg-danger'>失败</span>
+        {% elif case.status == '阻塞' %}
+        <span class='badge bg-warning text-dark'>阻塞</span>
+        {% else %}
+        <span class='badge bg-secondary'>{{case.status}}</span>
+        {% endif %}
+      </p>
+      <hr>
+      <button type="button" class="btn btn-success me-1 case-status" value=0>通过</button>
+      <button type="button" class="btn btn-danger me-1 case-status" value=1>失败</button>
+      <button type="button" class="btn btn-warning case-status" value=2>阻塞</button>
+      <button type="button" class="btn btn-secondary mt-2 me-1" id='save'>保存</button>
+      <button type="button" class="btn btn-secondary mt-2" id='next-save'>保存并新建</button>
+      <hr>
+      <p><strong>Enter: </strong>添加同级节点</p>
+      <p><strong>Insert: </strong>添加下级节点</p>
+      <p><strong>Delete: </strong>删除节点</p>
+      <p><strong>Ctrl+S: </strong>保存</p>
+      <p><strong>双击：</strong>编辑节点</p>
+    </div>
+    <div id="jsmind_container"></div>
+</div>
+{% endblock %}
+
+{% block model %}
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="/static/jsmind-0.4.6/jsmind.js"></script>
+<script type="text/javascript" src="/static/jsmind-0.4.6/jsmind.draggable.js"></script>
+<script type="text/javascript" src="/static/jsmind-0.4.6/jsmind.screenshot.js"></script>
+<script src="/static/js/case-make.js"></script>
+{% endblock %}

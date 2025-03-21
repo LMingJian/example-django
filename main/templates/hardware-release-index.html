@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link href="/static/css/release.css" rel="stylesheet">
+{% endblock %}
+
+{% block sidebars_item6 %}
+<a href="/release2" class="nav-link active selected">
+{% endblock %}
+
+{% block content %}
+    {% if user.username != '' %}
+    <!-- User function -->
+    <div class="btn-group" role="group">
+      <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#release-create">新增产品</button>
+      <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#series-add">新增种类</button>
+    </div>
+    {% endif %}
+    
+    <hr>
+
+    <!-- Item list -->
+    <div id='release-content'>
+      <div class='row ms-2'>
+        {% for s in release_family %}
+        <div class="d-flex flex-column flex-shrink-0 bg-white me-4 p-0 mb-3 release-box">
+          <div class="d-flex flex-shrink-0 p-3 link-dark text-decoration-none border-bottom-gray">
+            <span class="fs-5 fw-semibold">{{s.name}}</span>
+          </div>
+          
+          <div class='type-content overflow-y'>
+            {% for release in release_project %}
+            {% if release.father.name == s.name %}
+            <div class="list-group list-group-flush border-bottom">
+              <a href="release2?id={{release.id}}" class="list-group-item list-group-item-action py-3 lh-tight">
+                <div class="d-flex w-100 align-items-center justify-content-between">
+                  <strong class="mb-1">{{release.release_name}}</strong>
+                </div>
+              </a>
+            </div>
+            {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+        <div class="d-flex flex-column flex-shrink-0 bg-white me-4 p-0 mb-3 release-box">
+          <div class="d-flex flex-shrink-0 p-3 link-dark text-decoration-none border-bottom-gray">
+            <span class="fs-5 fw-semibold">其他</span>
+          </div>
+          
+          <div class='type-content overflow-y'>
+            {% for release in release_project %}
+            {% if not release.father.name %}
+            <div class="list-group list-group-flush border-bottom">
+              <a href="release2?id={{release.id}}" class="list-group-item list-group-item-action py-3 lh-tight">
+                <div class="d-flex w-100 align-items-center justify-content-between">
+                  <strong class="mb-1">{{release.release_name}}</strong>
+                </div>
+              </a>
+            </div>
+            {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    
+{% endblock %}
+
+{% block model %}
+<div class="modal fade" id="release-create" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">新增产品</h5>
+      </div>
+      <div class="modal-body">
+        <div class="input-group mb-3">
+          <label for='release-name'><span class="input-group-text">产品种类</span></label>
+          <select class="form-select" title='inputGroupSelect'>
+            <option selected value=''>请选择种类, 默认其他</option>
+            {% for s in series %}
+            <option value="series-{{s.id}}">{{s.name}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="input-group mb-3">
+          <label for='release-name'><span class="input-group-text">产品名称</span></label>
+          <input type="text" class="form-control" id="release-name">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary">确认</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="series-add" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">新增种类</h5>
+      </div>
+      <div class="modal-body">
+        <div class="input-group mb-3">
+          <label for='series-name'><span class="input-group-text">种类名称</span></label>
+          <input type="text" class="form-control" id="series-name">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary">确认</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="/static/js/release2-index.js"></script>
+{% endblock %}

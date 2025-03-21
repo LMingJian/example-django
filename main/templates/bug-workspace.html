@@ -1,0 +1,384 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link href="/static/css/workspace.css" rel="stylesheet">
+{% endblock %}
+
+{% block sidebars_item2 %}
+<a href="/workspace" class="nav-link active selected">
+{% endblock %}
+
+{% block content %}
+<div class='row workspace-row'>
+    <div id='bug-item' class='col-8'>
+      <h1 id='project-{{project.id}}'>{{project.name}}</h1>
+      <hr>
+      
+      {% for h1, h2_tree in node_tree.items %} 
+        <h2 id='h1-{{h1.id}}'>{{h1.number}} | {{h1.name}}</h2>
+        {% if h1.bug_count != 0 %}
+        <ul class="accordion list-group" id="accordionh1-{{h1.id}}">
+          {% for each in h1_bug %}
+            {% if h1.id == each.h1.id %}
+              {% if all == 1 %}
+                {% include "bug-workspace-ul-all.html" with title="h1" toggle=h1.id x_tag=tag x_status=status%}
+              {% else %}
+                {% include "bug-workspace-ul.html" with title="h1" toggle=h1.id x_tag=tag x_status=status%}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </ul>
+        {% endif %}
+        <hr>
+
+        {% for h2, h3_tree in h2_tree.items %}
+          <h3 class='margin-25' id='h2-{{h2.id}}'>{{h2.number}} | {{h2.name}}</h3>
+          {% if h2.bug_count != 0 %}
+          <ul class="accordion list-group margin-25" id="accordionh2-{{h2.id}}">
+            {% for each in h2_bug %}
+              {% if h2.id == each.h2.id %}
+                {% if all == 1 %}
+                  {% include "bug-workspace-ul-all.html" with title="h2" toggle=h2.id x_tag=tag x_status=status%}
+                {% else %}
+                  {% include "bug-workspace-ul.html" with title="h2" toggle=h2.id x_tag=tag x_status=status%}
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          </ul>
+          {% endif %}
+          <hr>
+
+            {% for h3, h4_tree in h3_tree.items %}
+              <h4 class='margin-50' id='h3-{{h3.id}}'>{{h3.number}} | {{h3.name}}</h4>
+              {% if h3.bug_count != 0 %}
+              <ul class="accordion list-group margin-50" id="accordionh3-{{h3.id}}">
+                {% for each in h3_bug %}
+                  {% if h3.id == each.h3.id %}
+                    {% if all == 1 %}
+                      {% include "bug-workspace-ul-all.html" with title="h3" toggle=h3.id x_tag=tag x_status=status%}
+                    {% else %}
+                      {% include "bug-workspace-ul.html" with title="h3" toggle=h3.id x_tag=tag x_status=status%}
+                    {% endif %}
+                  {% endif %}
+                {% endfor %}
+              </ul>
+              {% endif %}
+              <hr>
+
+                {% for h4 in h4_tree %}
+                  <h5 class='margin-75' id='h4-{{h4.id}}'>{{h4.number}} | {{h4.name}}</h5>
+                  {% if h4.bug_count != 0 %}
+                  <ul class="accordion list-group margin-75" id="accordionh4-{{h4.id}}">
+                    {% for each in h4_bug %}
+                      {% if h4.id == each.h4.id %}
+                        {% if all == 1 %}
+                          {% include "bug-workspace-ul-all.html" with title="h4" toggle=h4.id x_tag=tag x_status=status%}
+                        {% else %}
+                          {% include "bug-workspace-ul.html" with title="h4" toggle=h4.id x_tag=tag x_status=status%}
+                        {% endif %}
+                      {% endif %}
+                    {% endfor %}
+                  </ul>
+                  {% endif %}
+                  <hr>
+                {% endfor %}
+                      
+            {% endfor %}
+
+        {% endfor %}
+              
+      {% endfor %}
+      
+      <div class='div-blank'></div>
+        
+    </div>
+    <div id='work-catalogue' class='col'>
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-outline-dark" id='back-button'>返回</button>
+            <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#helpModal">使用帮助</button>
+            <button type="button" class="btn btn-outline-dark" id='export-bug'>导出BUG</button>
+            {% if user.username != '' %}
+            <button type="button" class="btn btn-outline-dark ms-2" data-bs-toggle="modal" data-bs-target="#addVersionModal">添加版本</button>
+            <button type="button" class="btn btn-outline-dark btn-import" data-bs-toggle="modal" data-bs-target="#addNodeModal">添加节点</button>
+            <button type="button" class="btn btn-outline-dark btn-import" data-bs-toggle="modal" data-bs-target="#addBugModal">添加BUG</button>
+            {% endif %}
+        </div>
+        <hr class='mb-0'>
+        <nav id="work-navbar" class="navbar navbar-light flex-column align-items-stretch p-2"></nav>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block model %}
+<div class="modal fade" id="addVersionModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">添加版本</h5>
+      </div>
+      <div class="modal-body">
+        <div class="input-group">
+          <span class="input-group-text">版本名称</span>
+          <input class="form-control" title='version'></input>
+        </div>
+        <div class="input-group mt-2">
+          <span class="input-group-text">更新内容</span>
+          <textarea class="form-control" title="notes"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary">确认</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="deleteNodeModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">删除节点</h5>
+      </div>
+      <div class="modal-body">
+        <h5>是否要删除该节点,节点下的BUG也会被一并移除?</h5>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary">确认</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="modifyNodeModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">修改节点</h5>
+      </div>
+      <div class="modal-body">
+        <div class="input-group">
+          <span class="input-group-text">序号</span>
+          <input class="form-control" title='number' type='number'></input>
+          <span class="input-group-text">节点</span>
+          <input class="form-control width-25" title='node' type='text'></input>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary">确认</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="helpModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">使用帮助</h5>
+      </div>
+      <div class="modal-body">
+        <ol>
+          <li>使用游客身份(未登录)即可对 BUG 进行部分状态的变更操作</li>
+          <li>登录后能对节点与 BUG 进行添加</li>
+          <li>点击目录可以快速跳转至对应节点</li>
+          <li>目录节点后为当前节点下存在的 BUG 的数量,仅统计当前节点下 BUG 的数量, 不包括子节点<span class="badge bg-danger ms-1">99</span></li>
+          <li>BUG 状态(如需添加新的状态,请联系管理员)
+            <ul>
+              <li><span class='list-group-item-info text-black'>建议</span>:&nbsp;建议更正,一般不影响使用的 BUG,优先级低</li>
+              <li><span class='list-group-item-warning text-black'>警告</span>:&nbsp;必须更正,但可以延期,在特定情况下会影响使用的 BUG,优先级中</li>
+              <li><span class='list-group-item-danger text-black'>严重</span>:&nbsp;必须更正,尽快修复,严重影响使用的 BUG,优先级高</li>
+              <li><span class='list-group-item-success text-black'>已改</span>:&nbsp;已经修复</li>
+              <li><span class='list-group-item-dark text-black'>不改</span>:&nbsp;不进行修复</li>
+              <li><span class='list-group-item-dark text-black'>关闭</span>:&nbsp;关闭 BUG,需要注意的是,BUG 关闭后将立即从列表中消失</li>
+            </ul>
+          </li>
+          <li>BUG 标签(如需添加新的标签,请联系管理员)
+            <ul>
+              <li><span class="badge rounded-pill bg-primary">4K</span>:&nbsp;4K 版本</li>
+              <li><span class="badge rounded-pill bg-dark">偶现</span>:&nbsp;偶然出现</li>
+            </ul>
+          </li>
+          <li>最多支持 4 层节点:&nbsp;H1,H2,H3,H4,节点添加时选项 H1,H2,H3,表示的是导入节点时的父节点。当不选择时,将在最上级中导入节点 H1</li>
+          <li>节点将以添加时的序号进行排序</li>
+          <li>BUG 添加时同理,必须选择对应的节点才能在添加,即至少要选择 H1 节点</li>
+          <li>BUG 添加标签选择中,可以按下 Ctrl 进行多选</li>
+          <li>BUG 添加时标签,备注可省略不填</li>
+          <li>节点与 BUG 创建后,如需修改节点的名称、序号或 BUG 描述,请联系管理员进行修改</li>
+        </ol>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="addBugNotesModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">编辑</h5>
+      </div>
+      <div class="modal-body">
+        <div class="input-group mb-3">
+          <span class="input-group-text">描述</span>
+          <input class="form-control" title='notes' {% if user.username == '' %}readOnly='readOnly'{% endif %}></input>
+        </div>
+        <div class="input-group">
+          <span class="input-group-text">备注</span>
+          <textarea class="form-control" title='notes'></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary">确认</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addBugModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">添加Bug</h5>
+      </div>
+      <div class="modal-body">
+        <div class="input-group">
+          <label class="input-group-text">H1</label>
+          <select class="form-select node_to_h1" title='bug_to_h1'>
+            <option selected value=''>Choose...</option>
+          </select>
+          <label class="input-group-text">H2</label>
+          <select class="form-select node_to_h2" title='bug_to_h2'>
+            <option selected value=''>Choose...</option>
+          </select>
+          <label class="input-group-text">H3</label>
+          <select class="form-select node_to_h3" title='bug_to_h3'>
+            <option selected value=''>Choose...</option>
+          </select>
+          <label class="input-group-text">H4</label>
+          <select class="form-select node_to_h4" title='bug_to_h4'>
+            <option selected value=''>Choose...</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <span class="input-group-text">描述</span>
+          <input class="form-control" id='bug_name' title='name'></input>
+        </div>
+        <div class="input-group">
+          <span class="input-group-text">评论/备注</span>
+          <textarea class="form-control" id="bug_notes" title='notes'></textarea>
+        </div>
+        <div class="input-group">
+          <label class="input-group-text" for="bug_status">状态</label>
+          <select class="form-select" id="bug_status" title='bug_status'>
+            <option selected value=''>Choose...</option>
+            {% for each in status %}
+            <option value="status-{{each.id}}">{{each.status}}</option>
+            {% endfor %}
+          </select>
+          <label class="input-group-text" for="bug_type">类型</label>
+          <select class="form-select" id="bug_type" title='bug_type'>
+            <option selected value=''>Choose...</option>
+            {% for each in type %}
+            <option value="type-{{each.id}}">{{each.type}}</option>
+            {% endfor %}
+          </select>
+          <label class="input-group-text">出现版本</label>
+          <select class="form-select" id="bug_version" title='bug_version'>
+            <option selected value=''>Choose...</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label class="input-group-text" for="bug_tag">标签</label>
+          <select class="form-select" multiple size="3" id="bug_tag" title='bug_tag'>
+            <option selected value=''>Choose...</option>
+            {% for each in tag %}
+            <option value="tag-{{each.id}}">{{each.tag}}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary">确认</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="addNodeModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">添加节点</h5>
+      </div>
+      <div class="modal-body">
+        <div class="input-group">
+          <label class="input-group-text">H1</label>
+          <select class="form-select node_to_h1" title='node_to_h1'>
+            <option selected value=''>Choose...</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label class="input-group-text">H2</label>
+          <select class="form-select node_to_h2" title='node_to_h2'>
+            <option selected value=''>Choose...</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label class="input-group-text">H3</label>
+          <select class="form-select node_to_h3" title='node_to_h3'>
+            <option selected value=''>Choose...</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <span class="input-group-text">序号</span>
+          <input type="number" class="form-control b">
+          <span class="input-group-text">名称</span>
+          <input type="text" class="width-25 form-control a">
+        </div>
+        <div class="input-group">
+          <span class="input-group-text">序号</span>
+          <input type="number" class="form-control b">
+          <span class="input-group-text">名称</span>
+          <input type="text" class="width-25 form-control a">
+        </div>
+        <div class="input-group">
+          <span class="input-group-text">序号</span>
+          <input type="number" class="form-control b">
+          <span class="input-group-text">名称</span>
+          <input type="text" class="width-25 form-control a">
+        </div>
+        <div class="input-group">
+          <span class="input-group-text">序号</span>
+          <input type="number" class="form-control b">
+          <span class="input-group-text">名称</span>
+          <input type="text" class="width-25 form-control a">
+        </div>
+        <div class="input-group">
+          <span class="input-group-text">序号</span>
+          <input type="number" class="form-control b">
+          <span class="input-group-text">名称</span>
+          <input type="text" class="width-25 form-control a">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary">确认</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="/static/js/workspace.js"></script>
+{% endblock %}

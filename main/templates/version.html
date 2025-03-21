@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link href="/static/css/version.css" rel="stylesheet">
+{% endblock %}
+
+{% block sidebars_item3 %}
+<a href="/version" class="nav-link active selected">
+{% endblock %}
+
+{% block content %}
+{% if user.username != '' %}
+<!-- User function -->
+<div class="btn-group" role="group">
+    <button type="button" class="btn btn-outline-dark" id='back'>返回</button>
+</div>
+{% endif %}
+<hr>
+<div id='version'>
+<div class="page-content single-page">
+    <div class='page-nav'>
+        <h4>版本记录</h4>
+        <ul>
+            {% if not content %}
+            <li><a class="active">没有找到版本数据</a></li>
+            {% endif %}
+            {% for key, value in content.items %}
+            {% if forloop.first %}
+            <li><a href='#{{key.name}}' class="active">{{key.name}}</a></li>
+            {% else %}
+            <li><a href='#{{key.name}}' class="">{{key.name}}</a></li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+    <div class='page-detail'>
+        {% if not content %}
+        <h2>None</h2>
+        <div class='time'>None</div>
+        {% endif %}
+        {% for key, value in content.items %}
+        <h2 id="{{key.name}}">{{key.name}}</h2>
+        {% if user.username != '' %}
+        <div class="btn-group btn-group-sm function" role="group" aria-label="Version maintenance">
+            <button type="button" class="btn btn-outline-dark ver-title" id="title-{{key.id}}" data-bs-toggle="modal" data-bs-target="#modifyVersionModal">修改</button>
+            {% if key.status == '启用' %}
+            <button type="button" class="btn btn-outline-dark ver-switch" id="switch-{{key.id}}">禁用</button>
+            {% else %}
+            <button type="button" class="btn btn-outline-dark ver-switch active" id="switch-{{key.id}}">启用</button>
+            {% endif %}
+        </div>
+        {% endif %}
+        <div class='time'>{{key.create_time | date:"Y-m-d" }}</div>
+        <ul>
+            {% for each in value %}
+            <li>{{each}}</li>
+            {% endfor %}
+        </ul>
+        {% endfor %}
+    </div>
+</div>
+</div>
+{% endblock %}
+
+{% block model %}
+<div class="modal fade" id="modifyVersionModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">修改版本</h5>
+        </div>
+        <div class="modal-body">
+          <div class="input-group">
+            <span class="input-group-text">版本名称</span>
+            <input class="form-control" title='title'></input>
+          </div>
+          <div class="input-group mt-2">
+            <span class="input-group-text">更新内容</span>
+            <textarea class="form-control" title="notes"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+          <button type="button" class="btn btn-primary">确认</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block script %}
+<script src="/static/js/version.js"></script>
+{% endblock %}

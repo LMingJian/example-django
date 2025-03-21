@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link href="/static/css/release.css" rel="stylesheet">
+{% endblock %}
+
+{% block sidebars_item6 %}
+<a href="/release2" class="nav-link active selected">
+{% endblock %}
+
+{% block content %}
+<h3 data={{release.id}}>{{release.release_name}}</h3>
+
+<hr>
+
+<!-- User function -->
+<div class="btn-group user-function" role="group">
+  <button type="button" class="btn btn-outline-dark" id='back-button'>返回</button>
+  {% if user.username != '' %}
+  <input class="form-control" type="text" id="file-name" placeholder="文件名称">
+  <input class="form-control" type="text" id="file-notes" placeholder="备注">
+  <label for="file-input"></label><input type="file" id="file-input" class="form-control">
+  <button type="button" class="btn btn-outline-dark ms-2" id="btn-upload">上传文件</button>
+  {% endif %}
+</div>
+
+<hr class="pro pro-disable">
+
+<div class="progress pro pro-disable">
+  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" title="progressbar"></div>
+</div>
+
+<hr>
+
+<div class="release-table">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">编号</th>
+            <th scope="col">发行时间</th>
+            <th scope="col">发行名称</th>
+            <th scope="col">备注</th>
+            <th scope="col">下载</th>
+            {% if user.username == 'admin' %}
+            <th scope="col">删除</th>
+            <th scope="col">替换</th>
+            {% endif %}
+        </tr>
+        </thead>
+        <tbody>
+        {% if version %}
+        {% for data in version %}
+        <tr>
+          <th scope="row">{{forloop.counter}}</th>
+          <td>{{data.update_time}}</td>
+          <td>{{data.name}}</td>
+          <td>{{data.describe}}</td>
+          <td><a href="javascript:void(0);" class="download" data="{{data.id}}" name="{{data.name}}">Download</a></td>
+          {% if user.username == 'admin' %}
+          <td><a href="javascript:void(0);" class="delete" data="{{data.id}}">Delete</a></td>
+          <td><a href="javascript:void(0);" class="replace" data="{{data.id}}">Replace</a></td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+        {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block model %}
+<div class="modal fade" id="replaceModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">替换文件</h5>
+      </div>
+      <div class="modal-body">
+        <div class="input-group mb-3">
+          <label></label>
+          <input type="file" class="form-control" id='replace-file'>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary">确认</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="/static/js/release2.js"></script>
+{% endblock %}

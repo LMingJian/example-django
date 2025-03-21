@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class='row ms-2'>
+{% if user.username != '' %}
+<div class='col-8 width-120'>
+  <div class="card">
+    <div class="card-header">
+      <h1>数据统计</h1>
+    </div>
+    <div class="card-body">
+      <div id='echart1' class='height-500'>
+      </div>
+    </div>
+    <div class="card-footer">
+      <div class="input-group w-50 float-right">
+        <select class="form-select me-1" id='echart-select-software' title='inputGroupSelect'>
+          <option selected value=0>请选择软件项目</option>
+          <option value=999>所有项目</option>
+        </select>
+        <select class="form-select me-1" id='echart-select-hardware' title='inputGroupSelect'>
+          <option selected value=0>请选择硬件项目</option>
+          <option value=999>所有项目</option>
+          {% for each in project %}
+          <option value='h-{{each.id}}'>{{each.name}}</option>
+          {% endfor %}
+        </select>
+        <select class="form-select" id='echart-select-type' title='inputGroupSelect' disabled>
+          <option selected value=0>按类型统计</option>
+          <option value=1>按时间统计</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+<div class='col-3 width-60'>
+  <div class='card'>
+    <div class='card-header'>
+      <h1>测试报告</h1>
+    </div>
+    <div class="card-body">
+      <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">报告名称</th>
+            <th scope="col">上传用户</th>  
+        </tr>
+        </thead>
+        <tbody>
+        {% for each in report %}
+        <tr>
+          <th scope="row"><a href='media\allure\{{each.name}}\index.html' target='_Blank'>{{each.name}}</a></th>
+          <td>{{each.uploader}}</td>    
+        </tr> 
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    <div class="card-footer">
+    </div>
+  </div>
+</div>
+{% else %}
+  <div class='col-4 mb-3 me-3 width-60'>
+    <div class="card">
+      <div class="card-header">
+        <h1>使用帮助</h1>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">1.获取研发中心软件方面最新的产品</h5>
+        <p class="card-text">点击<a href="/release">软件发行</a>，在选择项目后可以下载相应的软件安装文件</p>
+        <hr>
+        <h5 class="card-title">2.获取研发中心硬件方面最新的产品</h5>
+        <p class="card-text">点击<a href="/release2">硬件发行</a>，在选择项目后可以下载相应的硬件安装文件</p>
+        <hr>
+        {% if user.username != '' %}
+        <h5 class="card-title">3.查看研发中心硬件相关产品中的最新缺陷</h5>
+        <p class="card-text">点击<a href="/workspace">缺陷空间</a>，在选择项目后可以查看相关项目最新的缺陷</p>
+        <hr>
+        <h5 class="card-title">4.查看研发中心测试部所编写的用例</h5>
+        <p class="card-text">点击<a href="/case">用例空间</a>，在选择项目后可以查看相关项目所有的用例事件</p>
+        <hr>
+        {% endif %}
+        <!--
+        <h5 class="card-title">3.向研发中心提出反馈（包括故障，新需求等）</h5>
+        <p class="card-text">点击<a href="/feedback">反馈空间</a>，在选择项目后可以提出相应的反馈</p>
+        <hr>
+        -->
+      </div>
+    </div>
+  </div>
+{% endif %}
+</div>
+
+{% endblock %}
+
+{% block script %}
+{% if user.username != '' %}
+<script src="/static/apache-echarts-5.3.2/echarts.min.js"></script>
+<script src="/static/js/index.js"></script>
+{% endif %}
+{% endblock %}

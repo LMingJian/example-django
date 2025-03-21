@@ -1,0 +1,24 @@
+#jsmind_nav{
+    width:250px;
+    height:600px;
+    border:solid 1px #ccc;
+    overflow:auto;
+    float:left;
+}
+
+#jsmind_container{
+    position: relative;
+    float:left;
+    width: 1400px;
+    height: 600px;
+    background:#f4f4f4;
+}
+
+.jsmind-inner{
+    overflow: scroll;
+}
+
+.edit-input{
+    width: 150px;
+    height: 30px;
+}

@@ -172,3 +172,12 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# 忽略指定文件夹
+main/__pycache__
+main/migrations
+main/media
+ReleaseManager/__pycache__
+db.sqlite3
+*__pycache__*
+*migrations*

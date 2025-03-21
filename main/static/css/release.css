@@ -1,0 +1,40 @@
+.pro-disable {
+    display: none;
+}
+
+.progress-bar{
+    width: 0%;
+}
+
+.user-function {
+    min-width: 662px;
+}
+
+#file-name {
+    width: 120px; 
+}
+
+#file-notes {
+    width: 200px;
+}
+
+#file-input {
+    width: 250px; 
+    display: initial;
+}
+
+.release-table{
+    min-width: 800px;
+}
+
+.release-box {
+    width: 345px;
+    border: 2px solid gray;
+    height: 40vh;
+}
+
+.border-bottom-gray{
+    border-bottom-color: gray;
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+}

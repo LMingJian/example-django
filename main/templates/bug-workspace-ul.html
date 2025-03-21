@@ -1,0 +1,136 @@
+{% with each.status.status as status %}
+
+{% if status != '已改并关闭' and status != '不改并关闭'%}
+
+{% if user.username != '' %}
+
+    {% if status == '建议' %}
+    <li class="acc-li accordion-button collapsed list-group-item list-group-item-info text-black" type="button" data-bs-toggle="collapse" data-bs-target="#bug-{{each.id}}">
+    {% elif status == '警告' %}
+    <li class="acc-li accordion-button collapsed list-group-item list-group-item-warning text-black" type="button" data-bs-toggle="collapse" data-bs-target="#bug-{{each.id}}">
+    {% elif status == '严重' %}
+    <li class="acc-li accordion-button collapsed list-group-item list-group-item-danger text-black" type="button" data-bs-toggle="collapse" data-bs-target="#bug-{{each.id}}">
+    {% elif status == '已改' %}
+    <li class="acc-li accordion-button collapsed list-group-item list-group-item-success text-black" type="button" data-bs-toggle="collapse" data-bs-target="#bug-{{each.id}}">
+    {% elif status == '不改' %}
+    <li class="acc-li accordion-button collapsed list-group-item list-group-item-dark text-black" type="button" data-bs-toggle="collapse" data-bs-target="#bug-{{each.id}}">
+    {% endif %}
+      {% for data in each.tag.all %}
+      <span class="badge rounded-pill bg-dark me-1">{{data.tag}}</span>
+      {% endfor %}
+      <div class='bug-title'>{{each.name}}</div>
+      <div class='other-data float-right'>
+        <span class='badge bg-primary mt-1 ms-1'>{{each.version.name}}</span>
+        <span class='ms-1'>{{each.create_time}}</span>
+        <span class='ms-1'>@{{each.tester}}</span>
+        <span class="badge bg-secondary mt-1 ms-1">{{each.id}}</span>
+      </div>
+    </li>
+    
+    <li id="bug-{{each.id}}" class="accordion-collapse collapse">
+      <div class="accordion-body bg-light">
+        <div class='row'>
+          <div class='col-3'>
+            <div class="input-group input-group-sm">
+              <strong class="me-2 pt-1 mb-0">{{each.type.type}}</strong>
+              <select class="form-select selectBugStatus" id="selectBugStatus-{{each.id}}" title='inputGroupSelect'>
+                <option selected value=''>{{status}}</option>
+                {% for x in x_status %}
+                {% if x.status != status %}
+                <option value="status-{{x.id}}">{{x.status}}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+
+            <hr class='mt-2 mb-2'>
+            <div class="input-group input-group-sm">
+              <button type="button" id='cBugText-{{each.id}}' class="btn btn-outline-dark btn-sm cBugText w-35">修改/备注</button>
+              <select class="form-select ms-2 selectBugTag" id="selectBugTag-{{each.id}}" title='inputGroupSelect'>
+                <option selected value=''>添加标签</option>
+                {% for x in x_tag %}
+                <option value="tag-{{x.id}}">{{x.tag}}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <hr class='mt-2 mb-2'>
+            <div class="input-group input-group-sm">
+              <select class="form-select cBugVersion" id='cBugVersion-{{each.id}}' title='inputGroupSelect'>
+                <option selected value=''>绑定版本</option>
+              </select>
+              <select class="form-select ms-2 cBugType" id='cBugType-{{each.id}}' title='inputGroupSelect'>
+                <option selected value=''>修改类型</option>
+                {% for x in type %}
+                <option value="type-{{x.id}}">{{x.type}}</option>
+                {% endfor %}
+              </select>      
+            </div>
+            
+          </div>
+          <div class='col'>
+            <div id='bugText-{{each.id}}' class='bugText'>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+
+{% else %}
+
+    {% if status == '建议' %}
+    <li class="acc-li accordion-button collapsed list-group-item list-group-item-info text-black" type="button" data-bs-toggle="collapse" data-bs-target="#bug-{{each.id}}">
+    {% elif status == '警告' %}
+    <li class="acc-li accordion-button collapsed list-group-item list-group-item-warning text-black" type="button" data-bs-toggle="collapse" data-bs-target="#bug-{{each.id}}">
+    {% elif status == '严重' %}
+    <li class="acc-li accordion-button collapsed list-group-item list-group-item-danger text-black" type="button" data-bs-toggle="collapse" data-bs-target="#bug-{{each.id}}">
+    {% elif status == '已改' %}
+    <li class="acc-li accordion-button collapsed list-group-item list-group-item-success text-black" type="button" data-bs-toggle="collapse" data-bs-target="#bug-{{each.id}}">
+    {% elif status == '不改' %}
+    <li class="acc-li accordion-button collapsed list-group-item list-group-item-dark text-black" type="button" data-bs-toggle="collapse" data-bs-target="#bug-{{each.id}}">
+    {% endif %}
+      {% for data in each.tag.all %}
+      <span class="badge rounded-pill bg-dark me-1">{{data.tag}}</span>
+      {% endfor %}
+      <div class='bug-title'>{{each.name}}</div>
+      <div class='other-data float-right'>
+        <span class='badge bg-primary mt-1 ms-1'>{{each.version.name}}</span>
+        <span class='ms-1'>{{each.create_time}}</span>
+        <span class='ms-1'>@{{each.tester}}</span>
+        <span class="badge bg-secondary mt-1 ms-1">{{each.id}}</span>
+      </div>
+    </li>
+
+    <li id="bug-{{each.id}}" class="accordion-collapse collapse">
+      <div class="accordion-body bg-light">
+        <div class='row'>
+          <div class='col-3'>
+            <div class="input-group input-group-sm">
+              <strong class="me-2 pt-1 mb-0">{{each.type.type}}</strong>
+              <select class="form-select selectBugStatus" id="selectBugStatus-{{each.id}}" title='inputGroupSelect'>
+                <option selected value=''>{{status}}</option>
+                {% for x in x_status %}
+                {% if x.status != status and x.status == '不改' or x.status == '已改' %}
+                <option value="status-{{x.id}}">{{x.status}}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+            <hr class='mt-2 mb-2'>
+            <div class="input-group input-group-sm">
+              <button type="button" id='cBugText-{{each.id}}' class="btn btn-outline-dark btn-sm cBugText w-35">修改/备注</button>
+            </div>
+          </div>
+          <div class='col'>
+            <div id='bugText-{{each.id}}' class='bugText'>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+
+{% endif %}
+
+{% endif %}
+
+{% endwith %}

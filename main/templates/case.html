@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block css %}{% endblock %}
+
+{% block sidebars_item4 %}
+<a href="/case" class="nav-link active selected">
+{% endblock %}
+
+{% block content %}
+<div class='container-header'>
+    <h3>{{project.name}}</h3>
+    <hr>
+    <button type="button" class="btn btn-outline-dark me-2" id='back-button'>返回</button>
+    <button type="button" class="btn btn-outline-dark me-2" id='case-make'>用例编写</button>
+    <a href='?id={{project.id}}&user={{user.id}}'><button type="button" class="btn btn-outline-dark me-2 {% if all == 0 %}active{% endif %}">我的用例</button></a>
+    <a href='?id={{project.id}}'><button type="button" class="btn btn-outline-dark me-2 {% if all == 1 %}active{% endif %}">所有用例</button></a>
+    <button type="button" class="btn btn-outline-dark me-2" id='export-case'>导出用例</button>
+    <hr>
+</div>
+
+<div class="case-table mb-5">
+
+  <div class='row'>
+
+    <div class='col'>
+      <table class="table table-hover table-bordered">
+        <thead class="table-dark">
+        <tr>
+            <th scope="col" class='width-70'>编号</th>
+            <th scope="col">用例描述</th>   
+            <th scope="col" class='width-70'>状态</th>
+            <th scope="col" class='width-70'>作者</th>
+            <th scope="col" class='width-220'>时间</th>
+            <th scope="col" class='width-70'>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if case %}
+        
+        {% for each in case %}
+        <tr>
+          <td>{{each.order}}</td>
+          <td><a href="/case_make?cid={{each.id}}&pid={{project.id}}{% if all == 0 %}&user={{user.id}}{% endif %}">{{each.name}}</a></td>
+          {% if each.status == '通过' %}
+          <td><span class='badge bg-success'>通过</span></td>
+          {% elif each.status == '失败' %}
+          <td><span class='badge bg-danger'>失败</span></td>
+          {% elif each.status == '阻塞' %}
+          <td><span class='badge bg-warning text-dark'>阻塞</span></td>
+          {% else %}
+          <td><span class='badge bg-secondary'>{{each.status}}</span></td>
+          {% endif %}
+          <td>{{each.creater}}</td>
+          <td>{{each.create_time}}</td>
+          <td><a class='delete' href='javascript:void(0);' data='{{each.id}}'>删除</a></td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+        </tbody>
+      </table>
+
+      {% if page_count_len and page_count_len != 1 %}
+      <nav class='ms-2'>
+        <ul class="pagination">
+          {% for each in page_count %}
+          {% if forloop.counter == page_current %}
+          <li class="page-item active"><a class="page-link" href="?id={{project.id}}{% if all == 0 %}&user={{user.id}}{% endif %}&page={{forloop.counter}}">{{forloop.counter}}</a></li>
+          {% else %}
+          <li class="page-item"><a class="page-link text-dark" href="?id={{project.id}}{% if all == 0 %}&user={{user.id}}{% endif %}&page={{forloop.counter}}">{{forloop.counter}}</a></li>
+          {% endif %}
+          {% endfor %}
+        </ul>
+      </nav>
+      {% endif %}
+
+    </div>
+
+    <div class='col-4 ps-0'>
+      <div class="card">
+        <div class="card-header">
+          <h3 class='m-0'>用例编写规范</h3>
+        </div>
+        <div class="card-body ps-1">
+          <ol>
+            <li>用例以事件/场景为主体，每条用例都代表用户执行的一种操作</li>
+            <li>用例中应包括操作，现象，断言，测试人员可根据用例复现操作并检查现象，做出断言</li>
+            <li><span class='badge bg-success'>通过</span>: 当用例所有终点断言成功时，该用例应置为通过状态</li>
+            <li><span class='badge bg-danger'>失败</span>: 当用例存在终点断言失败时，该用例应置为失败状态</li>
+            <li><span class='badge bg-warning text-dark'>阻塞</span>: 当用例存在节点无法执行时，该用例应置为阻塞状态</li>
+            <li><span class='badge bg-secondary'>待测</span>: 当用例未执行时，该用例应置为待测状态</li>
+            <li>创建或执行时，用例所对应的上下针对的是全部用例，暂不支持个人用例的上下</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+   
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block model %}
+{% endblock %}
+
+{% block script %}
+<script src="/static/js/case.js"></script>
+{% endblock %}
